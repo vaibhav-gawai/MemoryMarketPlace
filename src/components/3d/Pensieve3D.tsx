@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Float, MeshTransmissionMaterial } from "@react-three/drei";
-import { Vector3, Mesh, MeshStandardMaterial, Group } from "three";
+import { Vector3, Mesh, MeshStandardMaterial, Group, Points} from "three";
 import { useSpring, a } from "@react-spring/three";
 
 // Simplified Pensieve model with fluid simulation
@@ -50,7 +50,7 @@ function PensieveModel({ hover, click }: { hover: boolean; click: boolean }) {
           metalness={0.8} 
           roughness={0.2} 
           emissive="#6495ed" 
-          emissiveIntensity={emissiveIntensity} 
+          emissiveIntensity={hover ? 0.5 : 0.2} 
         />
       </a.mesh>
       
@@ -80,7 +80,7 @@ function PensieveModel({ hover, click }: { hover: boolean; click: boolean }) {
           iridescenceIOR={1}
           iridescenceThicknessRange={[0, 1400]}
           color="#6495ed"
-          opacity={fluidOpacity}
+          opacity={click ? 0.8 : 0.6}
           transparent
         />
       </a.mesh>
@@ -127,7 +127,7 @@ function PensieveModel({ hover, click }: { hover: boolean; click: boolean }) {
 
 // Particle system for the magical effect
 function ParticleSystem() {
-  const particles = useRef<Mesh>(null);
+  const particles = useRef<Points>(null);
   const { viewport } = useThree();
   
   useFrame((state) => {
